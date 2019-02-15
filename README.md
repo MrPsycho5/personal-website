@@ -4,5 +4,5 @@ My personal site holding information about my academic and professional career a
 This site is based on [Hexo](https://hexo.io/) and personalized [Cactus](https://github.com/probberechts/hexo-theme-cactus) theme.
 
 Personalisation includes:
-+Disabling grayscale on logo
-+Moving "Projects" above "Writings"
++ Disabling grayscale on logo
++ Moving "Projects" above "Writings"
