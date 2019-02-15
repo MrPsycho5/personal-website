@@ -592,10 +592,8 @@ body {
   width: 50px;
   height: 50px;
   border-radius: 5px;
-  filter: grayscale(100%);
   background-size: 50px 50px;
   background-repeat: no-repeat;
-  -webkit-filter: grayscale(100%);
 }
 #header #nav {
   color: #2bbc8a;
@@ -1363,67 +1361,76 @@ article .content .caption {
   content: ")";
 }
 .highlight {
-  background: #474949;
-  color: #d1d9e1;
+  background: #333;
+  color: #fff;
 }
-.highlight .code .comment,
-.highlight .code .quote {
-  color: #969896;
-  font-style: italic;
-}
-.highlight .code .keyword,
-.highlight .code .selector-tag,
-.highlight .code .literal,
-.highlight .code .type,
-.highlight .code .addition {
-  color: #c9c;
-}
-.highlight .code .number,
-.highlight .code .selector-attr,
-.highlight .code .selector-pseudo {
-  color: #f99157;
-}
-.highlight .code .string,
-.highlight .code .doctag,
-.highlight .code .regexp {
-  color: #8abeb7;
-}
-.highlight .code .title,
-.highlight .code .name,
-.highlight .code .section,
-.highlight .code .built_in {
-  color: #b5bd68;
-}
-.highlight .code .variable,
-.highlight .code .template-variable,
-.highlight .code .selector-id,
-.highlight .code .class .title {
-  color: #fc6;
-}
-.highlight .code .section,
 .highlight .code .name,
 .highlight .code .strong {
   font-weight: bold;
 }
-.highlight .code .symbol,
-.highlight .code .bullet,
-.highlight .code .subst,
-.highlight .code .meta,
-.highlight .code .link {
-  color: #f99157;
-}
-.highlight .code .deletion {
-  color: #dc322f;
-}
-.highlight .code .formula {
-  background: #eee8d5;
-}
-.highlight .code .attr,
-.highlight .code .attribute {
-  color: #81a2be;
-}
+.highlight .code .code,
 .highlight .code .emphasis {
   font-style: italic;
+}
+.highlight .code .tag {
+  color: #62c8f3;
+}
+.highlight .code .variable,
+.highlight .code .template-variable,
+.highlight .code .selector-id,
+.highlight .code .selector-class {
+  color: #ade5fc;
+}
+.highlight .code .string,
+.highlight .code .bullet {
+  color: #a2fca2;
+}
+.highlight .code .type,
+.highlight .code .title,
+.highlight .code .section,
+.highlight .code .attribute,
+.highlight .code .quote,
+.highlight .code .built_in,
+.highlight .code .builtin-name {
+  color: #ffa;
+}
+.highlight .code .number,
+.highlight .code .symbol,
+.highlight .code .bullet {
+  color: #d36363;
+}
+.highlight .code .keyword,
+.highlight .code .selector-tag,
+.highlight .code .literal {
+  color: #fcc28c;
+}
+.highlight .code .comment,
+.highlight .code .deletion,
+.highlight .code .code {
+  color: #888;
+}
+.highlight .code .regexp,
+.highlight .code .link {
+  color: #c6b4f0;
+}
+.highlight .code .meta {
+  color: #fc9b9b;
+}
+.highlight .code .deletion {
+  background-color: #fc9b9b;
+  color: #333;
+}
+.highlight .code .addition {
+  background-color: #a2fca2;
+  color: #333;
+}
+.highlight .code .highlight a {
+  color: inherit;
+}
+.highlight .code .highlight a:focus,
+.highlight .code .highlight a:hover {
+  color: inherit;
+  text-decoration: underline;
 }
 pre {
   overflow-x: auto;
