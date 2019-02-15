@@ -1,0 +1,12 @@
+[
+    {
+       "name":"DNS Load Balancing",
+       "url":"",
+       "desc":"A GeoIP load balancing on budget. Consisted of 12 WWW servers and 3 DNS servers spread across the globe. Capable of handling thousands of requests per second with the lowest possible latency to user. All under $32/year (including the servers)."
+    },
+    {
+       "name":"ARISS Contact",
+       "url":"https://www.facebook.com/ariss2018/",
+       "desc":"I was managing a small group of people and was in charge of the video & audio feeds for participants, guests and live stream viewers. ARISS offers an opportunity for students to talk directly with crewmembers on board of the International Space Station. Three schools from Poland participated in this event."
+    }
+]
