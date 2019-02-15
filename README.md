@@ -6,3 +6,5 @@ This site is based on [Hexo](https://hexo.io/) and personalized [Cactus](https:/
 Personalisation includes:
 + Disabling grayscale on logo
 + Moving "Projects" above "Writings"
++ Removed category and tags from posts
++ Changed uppercased post author to capitalized

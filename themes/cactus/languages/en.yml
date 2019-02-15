@@ -11,7 +11,7 @@ footer:
   copyright: Copyright
 
 index:
-  find_me_on: Contact me through email 
+  find_me_on: "Contact me through email:"
   enum_comma: ','
   enum_and: and
   articles: Writing
