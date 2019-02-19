@@ -128,13 +128,13 @@ Make sure to save both `rsa_key.pub` and `rsa_key.priv` to the root of your work
 
 Now we can append those public keys to the corresponding hosts files
 
-#### Node A:
+On Node A:
 
 ```
 cat rsa_key.pub >> hosts/NodeA
 ```
 
-#### Node B:
+On Node B:
 
 ```
 cat rsa_key.pub >> hosts/NodeB
@@ -145,13 +145,13 @@ Now we should exchange the hosts files between the nodes. You can use scp for ex
 From NodeA
 
 ```
-scp /etc/tinc/PsychoVPN/hosts/NodeA <user>@<NodeB>:/etc/tinc/PsychoVPN/hosts/NodaA
+scp /etc/tinc/PsychoVPN/hosts/NodeA <user>@<NodeB>:/etc/tinc/PsychoVPN/hosts/NodeA
 ```
 
 From NodeB
 
 ```
-scp /etc/tinc/PsychoVPN/hosts/NodeB <user>@<NodeA>:/etc/tinc/PsychoVPN/hosts/NodaB
+scp /etc/tinc/PsychoVPN/hosts/NodeB <user>@<NodeA>:/etc/tinc/PsychoVPN/hosts/NodeB
 ```
 
 ## Control Scripts
@@ -160,7 +160,7 @@ Control scripts are responsible for setting up virtual interfaces on each server
 
 Script for enabling tinc interface on Node A:
 
-#### Noda A: /etc/tinc/PsychoVPN/tinc-up
+#### Node A: /etc/tinc/PsychoVPN/tinc-up
 
 ```
 #!/bin/sh
