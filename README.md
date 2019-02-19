@@ -8,3 +8,4 @@ Personalisation includes:
 + Moving "Projects" above "Writings"
 + Removed category and tags from posts
 + Changed uppercased post author to capitalized
++ Centered header 4
