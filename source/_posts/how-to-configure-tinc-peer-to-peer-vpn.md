@@ -69,6 +69,8 @@ Tinc has a lot of configurable options
 
 Here is a simple main configuration for NodeA:
 
+#### Node A: /etc/tinc/PsychoVPN/tinc.conf
+
 ```
 Name = NodeA
 Device = /dev/net/tun
@@ -77,6 +79,8 @@ ConnectTo = NodeB
 ```
 
 ...and here is for NodeB
+
+#### Node B: /etc/tinc/PsychoVPN/tinc.conf
 
 ```
 Name = NodeB
@@ -96,7 +100,9 @@ Subnet =
 
 We also have to add public key of specific node to that file.
 
-So on the Node A we are going to create a `NodeA` under the `../hosts` folder.
+So on the Node A we are going to create a `NodeA` file under the `../hosts` folder.
+
+#### Node A: /etc/tinc/PsychoVPN/hosts/NodeA
 
 ```
 Address = 1.1.1.1
@@ -104,6 +110,8 @@ Subnet = 10.3.0.1
 ```
 
 ...and similarly on the Node B (`../hosts/NodeB`) 
+
+#### Node B: /etc/tinc/PsychoVPN/hosts/NodeB
 
 ```
 Address = 2.2.2.2
@@ -120,13 +128,13 @@ Make sure to save both `rsa_key.pub` and `rsa_key.priv` to the root of your work
 
 Now we can append those public keys to the corresponding hosts files
 
-On Node A
+#### Node A:
 
 ```
 cat rsa_key.pub >> hosts/NodeA
 ```
 
-On Node B
+#### Node B:
 
 ```
 cat rsa_key.pub >> hosts/NodeB
@@ -152,7 +160,7 @@ Control scripts are responsible for setting up virtual interfaces on each server
 
 Script for enabling tinc interface on Node A:
 
-#### /etc/tinc/PsychoVPN/tinc-up
+#### Noda A: /etc/tinc/PsychoVPN/tinc-up
 
 ```
 #!/bin/sh
@@ -163,7 +171,7 @@ ip route add 10.3.0.0/24 dev $INTERFACE
 
 Script for disabling tinc interface on Node A:
 
-#### /etc/tinc/PsychoVPN/tinc-down
+#### Node A: /etc/tinc/PsychoVPN/tinc-down
 
 ```
 #!/bin/sh
@@ -174,7 +182,7 @@ ip link set $INTERFACE down
 
 ...enabling tinc interface on Node B:
 
-#### /etc/tinc/PsychoVPN/tinc-up
+#### Node B: /etc/tinc/PsychoVPN/tinc-up
 
 ```
 #!/bin/sh
@@ -185,7 +193,7 @@ ip route add 10.3.0.0/24 dev $INTERFACE
 
 ...disabling tinc interface on Node B:
 
-#### /etc/tinc/PsychoVPN/tinc-down
+#### Node B: /etc/tinc/PsychoVPN/tinc-down
 
 ```
 #!/bin/sh
