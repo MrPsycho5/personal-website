@@ -1,3 +1,4 @@
+---
 title: 'Configuring Tinc, an encrypted P2P VPN'
 tags:
   - VPN
@@ -8,7 +9,7 @@ author: Jakub Papuga
 date: 2019-02-15 13:34:00
 ---
 ## What is tinc?
-Tinc is a dead simple , yet super flexible VPN deamon.
+Tinc is dead simple , yet super flexible VPN deamon.
 
 It also has some nice features, such as:
 + encryption
@@ -17,12 +18,12 @@ It also has some nice features, such as:
 + NAT traversal
 + IPv6 support
 
-### This articale will demonstrate how to create a basic two node VPN and how to add new nodes to the mesh network.
+### This article will demonstrate how to create a basic two-node VPN.
 
 ## Topology cheatsheet
 
 |  | Node A | Node B |
-|:---|:---:|:---:|
+|:---|:---:|:---:|:---:|
 | Public IPv4 | 1.1.1.1 | 2.2.2.2 |
 | VPN Address | 10.3.0.1 | 10.3.0.2 |
 | VPN Network Name | PsychoVPN | PsychoVPN |
@@ -54,18 +55,18 @@ apt install tinc -y
 Tinc requires a main configuration file named `tinc.conf`. The folder in which you put the `tinc.conf` file has to match the designated name of your VPN - in my case: `/etc/tinc/PsychoVPN`.
 
 ```
-mkdir -p /etc/tinc/PsychoVPN/hosts
+mkdir -p /etc/tinc/PsychoVPN/hosts && cd /etc/tinc/PsychoVPN
 ```
 
-Tinc has a lot of configurable options
+Tinc has a lot of configurable options:
 
 + `Name` - this is our node name within the network   
-+ `Device` - Determinaes the virtual network to use.
++ `Device` - Determinates the virtual network to use.
 + `AddressFamily` - indicates which type of address to use (ipv4|ipv6|any)
-+ `ConnectTo` - Specifies which other tinc daemon to connect to on startup.  Multiple ConnectTo variables may be specified, in which case outgoing connections to each specified tinc daemon are made.  The names should be known to this tinc daemon (i.e., there should be a host configuration file for the name on the ConnectTo line). Gives the ability to create a centralized interconnection (make NodeA and NodeB connect only to NodeC and from there make NodeC connect to both servers). If you don't specify a host with ConnectTo, tinc won't try to connect to other daemons at all, and will instead just listen for incoming connections.
++ `ConnectTo` - Specifies which other tinc daemons to connect to on startup.  Multiple ConnectTo variables may be specified, in which case, outgoing connections to each specified tinc daemon are made.  The names should be known to this tinc daemon (i.e., there should be a host configuration file for the name on the ConnectTo line). Gives the ability to create a centralized interconnection (make NodeA and NodeB connect only to NodeC and from there make NodeC connect to both servers). If you don't specify a host with ConnectTo, tinc won't try to connect to other daemons at all, and will instead just listen for incoming connections.
 + `BindToAddress = [address] [port]` - If your computer has more than one IPv4 or IPv6 address, tinc will by default listen on all of them for incoming connections.  Multiple BindToAddress variables may be specified. If no port is specified, the socket will be bound to the port specified by the Port option, or to port 655 if neither is given.  To only bind to a specific port but not to a specific address, use * for the address.
 + `BindToInterface = [interface]` - If your computer has more than one network interface, tinc will by default listen on all of them for incoming connections.  It is possible to bind only to a single interface with this variable.
-+ More optins avaiable [here](https://www.tinc-vpn.org/documentation/tinc.conf.5)
++ More options available [here](https://www.tinc-vpn.org/documentation/tinc.conf.5)
 
 Here is a simple main configuration for NodeA:
 
@@ -91,16 +92,16 @@ ConnectTo = NodeA
 
 ### Host configuration files
 
-Because tinc is a P2P VPN it needs to communicate with the other servers. The very basic host file looks like this and has to be named afer the node name:
+Because tinc is a P2P VPN it needs to communicate with the other servers. The very basic host file looks like this and has to be named after the node name:
 
 ```
 Address = 
 Subnet = 
 ```
 
-We also have to add public key of specific node to that file.
+We also have to add the public key of a specific node to that file.
 
-So on the Node A we are going to create a `NodeA` file under the `../hosts` folder.
+So on Node A we are going to create a `NodeA` file under the `../hosts` folder.
 
 #### Node A: /etc/tinc/PsychoVPN/hosts/NodeA
 
@@ -210,13 +211,13 @@ chmod -v +x /etc/tinc/PsychoVPN/tinc-{up,down}
 
 ## Testing tinc
 
-Your newly configured VPN should be ready to test. Start the deamon on both servers:
+Your newly configured VPN should be ready to test. Start the daemon on both servers:
 
 ```
 tincd -n PsychoVPN -LD -d3
 ```
 
-Now you should be able to ping Node B from Node A and vice versa from new terminal. To elevate debug level from 3 to 5 press `CTRL+C`. To stop tincd press `CTRL+\`. If you ran tincd in background you can use the `-k` option to kill the running tincd.
+Now you should be able to ping Node B from Node A and vice versa from new terminal window. You may notice that `CTRL+C` is not terminating tinc, instead, it's elevating the debug level from 3 to 5. To stop tincd press `CTRL+\`. If you ran tincd in the background you can use the `-k` option to kill the running tincd.
 
 ## Run tinc on startup
 
