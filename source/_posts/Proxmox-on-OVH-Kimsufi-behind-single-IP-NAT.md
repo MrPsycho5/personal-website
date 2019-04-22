@@ -161,4 +161,4 @@ iptables -t nat -A PREROUTING -i vmbr0 -p udp --dport 32410 -j DNAT --to 192.168
 
 ## That's it.
 
-We are done. You can now follow [How to hide Proxmox's web interface behind reverse proxy](https://somwehere).
+We are done. You can now follow [How to hide Proxmox's web interface behind reverse proxy](https://new.mrpsycho.pl/cheatsheets/Hide-Proxmox-interface-behind-nginx-reverse-proxy-SSL-VNC/).
