@@ -9,7 +9,7 @@ author: Jakub Papuga
 date: 2019-02-15 13:34:00
 ---
 ## What is tinc?
-Tinc is dead simple , yet super flexible VPN deamon.
+Tinc a is dead simple, yet super flexible, VPN daemon.
 
 It also has some nice features, such as:
 + encryption
@@ -61,9 +61,9 @@ mkdir -p /etc/tinc/PsychoVPN/hosts && cd /etc/tinc/PsychoVPN
 Tinc has a lot of configurable options:
 
 + `Name` - this is our node name within the network   
-+ `Device` - Determinates the virtual network to use.
++ `Device` - Determines the virtual network to use.
 + `AddressFamily` - indicates which type of address to use (ipv4|ipv6|any)
-+ `ConnectTo` - Specifies which other tinc daemons to connect to on startup.  Multiple ConnectTo variables may be specified, in which case, outgoing connections to each specified tinc daemon are made.  The names should be known to this tinc daemon (i.e., there should be a host configuration file for the name on the ConnectTo line). Gives the ability to create a centralized interconnection (make NodeA and NodeB connect only to NodeC and from there make NodeC connect to both servers). If you don't specify a host with ConnectTo, tinc won't try to connect to other daemons at all, and will instead just listen for incoming connections.
++ `ConnectTo` - Specifies which other tinc daemons to connect to on startup.  Multiple ConnectTo variables may be specified, in which case, outgoing connections to each specified tinc daemon are made.  The names should be known to this tinc daemon (i.e. there should be a host configuration file for the name on the ConnectTo line). This also gives the ability to create a centralized interconnection (make NodeA and NodeB connect only to NodeC and from there make NodeC connect to both servers). If you don't specify a host with ConnectTo, tinc won't try to connect to other daemons at all, and will instead just listen for incoming connections.
 + `BindToAddress = [address] [port]` - If your computer has more than one IPv4 or IPv6 address, tinc will by default listen on all of them for incoming connections.  Multiple BindToAddress variables may be specified. If no port is specified, the socket will be bound to the port specified by the Port option, or to port 655 if neither is given.  To only bind to a specific port but not to a specific address, use * for the address.
 + `BindToInterface = [interface]` - If your computer has more than one network interface, tinc will by default listen on all of them for incoming connections.  It is possible to bind only to a single interface with this variable.
 + More options available [here](https://www.tinc-vpn.org/documentation/tinc.conf.5)
@@ -92,16 +92,16 @@ ConnectTo = NodeA
 
 ### Host configuration files
 
-Because tinc is a P2P VPN it needs to communicate with the other servers. The very basic host file looks like this and has to be named after the node name:
+Because tinc is a P2P VPN it needs to communicate with the other servers. A very basic host file looks like this and has to be named after the node name:
 
 ```
-Address = 
-Subnet = 
+Address =
+Subnet =
 ```
 
 We also have to add the public key of a specific node to that file.
 
-So on Node A we are going to create a `NodeA` file under the `../hosts` folder.
+On Node A we are going to create a `NodeA` file under the `../hosts` folder.
 
 #### Node A: /etc/tinc/PsychoVPN/hosts/NodeA
 
@@ -110,7 +110,7 @@ Address = 1.1.1.1
 Subnet = 10.3.0.1
 ```
 
-...and similarly on the Node B (`../hosts/NodeB`) 
+...and similarly on Node B (`../hosts/NodeB`)
 
 #### Node B: /etc/tinc/PsychoVPN/hosts/NodeB
 
@@ -127,7 +127,7 @@ tincd -n PsychoVPN -K 4096
 
 Make sure to save both `rsa_key.pub` and `rsa_key.priv` to the root of your working directory (`/etc/tinc/PsychoVPN`)
 
-Now we can append those public keys to the corresponding hosts files
+Now we can append those public keys to the corresponding hosts files:
 
 On Node A:
 
@@ -141,7 +141,7 @@ On Node B:
 cat rsa_key.pub >> hosts/NodeB
 ```
 
-Now we should exchange the hosts files between the nodes. You can use scp for example:
+We should exchange the hosts files between the nodes. You can use scp for example:
 
 From NodeA
 
@@ -203,7 +203,7 @@ ip addr del 10.3.0.2 dev $INTERFACE
 ip link set $INTERFACE down
 ```
 
-After creating the control scrips, you have to adjust the permissions on both servers:
+After creating the control scripts, you have to adjust the permissions on both servers:
 
 ```
 chmod -v +x /etc/tinc/PsychoVPN/tinc-{up,down}
@@ -221,7 +221,7 @@ Now you should be able to ping Node B from Node A and vice versa from new termin
 
 ## Run tinc on startup
 
-To run tinc on startup you will need to set up a systemd unit file on each node.
+To run tinc on startup you will need to set up a systemd unit file on each node. An example systemd unit file is below.
 
 #### /etc/systemd/system/PsychoVPN.service
 ```
@@ -242,13 +242,13 @@ RestartSec=60
 WantedBy=multi-user.target
 ```
 
-Now enable the service on startup
+To enable the service automatically starting on system startup, run
 
 ```
 sudo systemctl enable PsychoVPN.service
 ```
 
-You can start, stop the service using
+You can start and stop the service using
 
 ```
 systemctl start|stop PsychoVPN.service

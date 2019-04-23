@@ -10,8 +10,8 @@ date: 2019-03-13 12:34:00
 ---
 ## Introduction
 
-This time we are going to add third node - Node C to the mesh network. Tinc is going automatically choose the best route.
-You should already be familar with basic tinc configuration, that I described in previous article - [Configuring Tinc, an encrypted P2P VPN](https://new.mrpsycho.pl/cheatsheets/how-to-configure-tinc-peer-to-peer-vpn).
+This time we are going to add a third node, Node C, to the mesh network. Tinc is going to automatically choose the best route.
+You should already be familiar with basic tinc configuration, that I described in previous article - [Configuring Tinc, an encrypted P2P VPN](https://new.mrpsycho.pl/cheatsheets/how-to-configure-tinc-peer-to-peer-vpn).
 
 ## Topology cheatsheet
 
@@ -41,7 +41,7 @@ ConnectTo = NodeA
 ConnectTo = NodeB
 ```
 
-Now the host file:
+Now edit the host file:
 
 #### Node C: /etc/tinc/PsychoVPN/hosts/NodeC
 
@@ -50,33 +50,33 @@ Address = 3.3.3.3
 Subnet = 10.3.0.3
 ```
 
-Create a pair of keys (make sure to save both files under `/etc/tinc/PsychoVPN`): 
+Create a pair of keys (make sure to save both files under `/etc/tinc/PsychoVPN`):
 
 ```
 tincd -n PsychoVPN -K 4096
 ```
 
-Append the public key to `NodeC` host file.
+Append the public key to the `NodeC` host file.
 
 ```
 cat rsa_key.pub >> hosts/NodeC
 ```
 
-Now you can exchange the host file with Node A and Node B
+Exchange the host file with Node A and Node B
 
 ```
 scp /etc/tinc/PsychoVPN/hosts/NodeC <user>@<NodeA>:/etc/tinc/PsychoVPN/hosts/NodeC
 scp /etc/tinc/PsychoVPN/hosts/NodeC <user>@<NodeB>:/etc/tinc/PsychoVPN/hosts/NodeC
 ```
 
-It's also required for Node C to have both Node A and Node B host files. To you reverse the `scp` to download files from Node A and Node B directly from Node C:
+It's also required for Node C to have both Node A's and Node B's host files. To do this, reverse the `scp` to download files from Node A and Node B directly from Node C:
 
 ```
 scp <user>@<NodeA>:/etc/tinc/PsychoVPN/hosts/NodeA /etc/tinc/PsychoVPN/hosts/NodeA
 scp <user>@<NodeB>:/etc/tinc/PsychoVPN/hosts/NodeB /etc/tinc/PsychoVPN/hosts/NodeB
 ```
 
-You can also just copy the contexct of `hosts` folder from desired Node, saving you the hassle of double authentication:
+You can also just copy the content of the `hosts` folder from any Node, saving you the hassle of authenticating twice:
 
 ```
 scp <user>@<NodeA>:/etc/tinc/PsychoVPN/hosts/* /etc/tinc/PsychoVPN/hosts/
@@ -84,4 +84,4 @@ scp <user>@<NodeA>:/etc/tinc/PsychoVPN/hosts/* /etc/tinc/PsychoVPN/hosts/
 
 ### That's it!
 
-From this point just follow the previous aritcle's instructions starting from [#Control Scrips](https://new.mrpsycho.pl/cheatsheets/how-to-configure-tinc-peer-to-peer-vpn/#Control-Scripts). Just remember to adjust the IP addresses correspondingly!
+From this point just follow the previous article's instructions starting from [#Control Scrips](https://new.mrpsycho.pl/cheatsheets/how-to-configure-tinc-peer-to-peer-vpn/#Control-Scripts). Just remember to adjust the IP addresses correspondingly!

@@ -10,15 +10,17 @@ categories:
   - cheatsheets
 author: Jakub Papuga
 ---
-## Introduction 
+## Introduction
 
-In this article, I assume that you already know what reverse proxy is, how to use DNS. I'm also assuming you already have an nginx server. In the [last](https://new.mrpsycho.pl/cheatsheets/Proxmox-on-OVH-Kimsufi-behind-single-IP-NAT/) article I've explained how to configure Proxmox to work with one IPv4 and as an example, I used a container with nginx, so you may want to take a look at it if you want to put the reverse proxy on a node with one IPv4. Of course, you can use whatever server with nginx you want (preferably one with low latency to the host node). I only advise you against installing nginx directly on the host node as you will lose the ability to effortlessly backup and restore the service as if it was in a VM. Furthermore installing additional software on the host node is generally a bad practice.
+In this article, I assume that you already know what reverse proxy is, as well as how to use DNS. I'm also assuming you already have an nginx server.
 
-In a separate article, I'll describe how to restrict Proxmox interface geographically. If the article is available I suggest you reading it first, as geographic blocking requires compiling nginx with Geo-IP module. 
+In the [last](https://new.mrpsycho.pl/cheatsheets/Proxmox-on-OVH-Kimsufi-behind-single-IP-NAT/) article I explained how to configure Proxmox to work with one IPv4 and as an example, I used a container with nginx, so you may want to take a look at it if you want to put the reverse proxy on a node with one IPv4 address. Of course, you can use whatever server with nginx you want (preferably one with low latency to the host node). I only advise you against installing nginx directly on the host node as you will lose the ability to effortlessly backup and restore the service as if it was in a VM. Furthermore, installing additional software on the host node is generally a bad practice.
 
-## Let's Encrypt 
+In a separate article, I'll describe how to restrict Proxmox interface geographically. If the article is available I suggest that you read it first, as geographic blocking requires compiling nginx with the Geo-IP module.
 
-Firstly we have to obtain an SSL certificate. Presumably, also automate its renewal. Since there are a few different ways to install cerbot, I'm going with the one that is the most universal. Execute the following command inside the container.
+## Let's Encrypt
+
+First, we have to obtain an SSL certificate and (presumably) also automate its renewal. As there are a few different ways to install certbot, I'm going with the one that is the most universal. Execute the following command inside the container.
 
 Download certbot-auto script and make it executable:
 
@@ -92,7 +94,7 @@ IMPORTANT NOTES:
 
 ### Automation
 
-Certbot now has an nginx plugin which gives the ability to obtain the certificate without interrupting nginx, so there is no longer a need to stop nginx and use the standalone server. To renew the certificates on every 3rd day of the month at 2:00AM simply run `crontab -e` and add the following:
+Certbot has an nginx plugin which gives the ability to obtain the certificate without interrupting nginx, so it is no longer necessary to stop nginx and use the standalone server. To renew the certificates on every 3rd day of the month at 2:00AM simply run `crontab -e` and add the following:
 
 ```
 0 2 3 * * /path/to/certbot-auto renew
@@ -100,13 +102,13 @@ Certbot now has an nginx plugin which gives the ability to obtain the certificat
 
 ## NGINX Reverse Proxy
 
-To make VNC work on Proxmox 5.x we have to do some magic and copy some folders from the host node as nginx hangs while waiting for them. To copy the folders painlessly mount the container filesystem on the host. This will put a lock on the container.
+To make VNC work on Proxmox 5.x we have to do some magic and copy some folders from the host node as nginx hangs while waiting for them. To copy the folders painlessly, mount the container filesystem on the host. The following commands work only if your nginx server is inside a container. It will also put a lock on the container.
 
 ```
 pct mount 100
 ```
 
-Now copy the following directories. The first half (till /var/www) of the second path is the path given you by `pct mount`
+Now copy the following directories. The first half (up to /var/www) of the second path is the path given you by `pct mount`.
 
 ```
 mkdir /var/lib/lxc/100/rootfs/var/www/proxmox/
@@ -116,21 +118,21 @@ cp -r /usr/share/javascript/proxmox-widget-toolkit /var/lib/lxc/100/rootfs/var/w
 cp -r /usr/share/pve-docs /var/lib/lxc/100/rootfs/var/www/proxmox/pve-docs
 ```
 
-Now set the permissions, so that the container can do anything with those files and umount the filesystem. For the user & group you can `ls -lh` any folder inside the file system (eg. `ls -lh /var/lib/lxc/100/rootfs/var/www/`)
+Now set the permissions, so that the container can do anything with those files and unmount the filesystem. To find the user & group you can `ls -lh` any folder inside the file system (eg. `ls -lh /var/lib/lxc/100/rootfs/var/www/`)
 
 ```
 chown -R 100000:100000 /var/lib/lxc/100/rootfs/var/www/proxmox
 pct unmount 100
 ```
 
-Now we switch back to the container and set the correct ownership of /var/www/proxmox
+Switch back to the container and set the correct ownership of /var/www/proxmox
 
 ```
 chown -R www-data:www-data /var/www/proxmox
 ```
 
 
-Now create a new file under `/etc/nginx/sites-available/`
+Create a new file under `/etc/nginx/sites-available/`
 
 ```
 touch /etc/nginx/sites-available/proxmox.domain.tld
@@ -151,7 +153,7 @@ server  {
 server {
   listen 443 ssl http2;
   server_name proxmox.domain.tld;
-  
+
   ssl_certificate  /etc/letsencrypt/live/proxmox.domain.tld/fullchain.pem;
   ssl_certificate_key /etc/letsencrypt/live/proxmox.domain.tld/privkey.pem;
   ssl_session_timeout  5m;
@@ -160,20 +162,20 @@ server {
   if ($invalid_referer) {
    return 403;
   }
-  
+
   add_header X-Frame-Options SAMEORIGIN;
   add_header X-Content-Type-Options nosniff;
   add_header Strict-Transport-Security "max-age=31536000; includeSubDomains";
   server_tokens off;
-        
+
   access_log /var/log/nginx/proxmox.domain.tld-access.log;
   error_log /var/log/nginx/proxmox.domain.tld-error.log;
-  
+
   # Backups, images and ISO uploading
   client_max_body_size 5G;
 
   include proxy_params;
-  
+
 
   location / {
     proxy_set_header Upgrade $http_upgrade;
@@ -191,9 +193,9 @@ server {
     include proxy_params;
     proxy_pass https://192.168.0.254:8006;
   }
-  
+
   #Some magic
-  
+
   location ~* ^/pve2/(?<file>.*)$ {
     gzip_static on;
     root /var/www/proxmox/pve-manager/;
@@ -225,9 +227,9 @@ Now enable the site by linking the file inside `sites-available/` to `sites-enab
 ln -s /etc/nginx/sites-available/proxmox.domain.tld /etc/nginx/sites-enabled/proxmox.domain.tld
 ```
 
-You can check for any errors by issuing `nginx -t` (if you get 'conflicting server name' that's because you still have the default_server inside sites-enabled/default)
+You can check for any errors by issuing `nginx -t` (if you get 'conflicting server name' that's because you still have the default_server inside `sites-enabled/default`)
 
-If everything is okay reload the server
+If everything is okay, reload the server
 
 ```
 service nginx reload

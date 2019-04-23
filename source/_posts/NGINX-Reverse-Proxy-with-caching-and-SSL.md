@@ -48,7 +48,7 @@ server  {
 	proxy_set_header Host $host;
 	proxy_hide_header X-Powered-By;
 	add_header X-Cache-Status $upstream_cache_status;
-	 
+
 	proxy_cache something_cache;
 	proxy_cache_revalidate on;
 	proxy_cache_valid 10m;
@@ -61,7 +61,7 @@ server  {
 }
 ```
 
-To enable the new site run
+To enable the new site, execute:
 
 ```
 ln -s /etc/nginx/sites-available/domain.tld /etc/nginx/sites-enabled/domain.tld \
@@ -70,23 +70,23 @@ ln -s /etc/nginx/sites-available/domain.tld /etc/nginx/sites-enabled/domain.tld 
 
 ## Explanation
 
-The first `server{}` block listening on port 80 simply redirects the traffic to HTTPS url.
+The first `server{}` block listening on port 80 simply redirects the traffic to HTTPS URL.
 
-`levels` - if not included NGINX puts all files in the same directory, slowing things down.
+`levels` - if not included, NGINX puts all files in the same directory, slowing things down.
 
-`keys_zone` - defines a place in memory where NGINX stores metadata greately imporivng performance. 1MB zone can store roughly 8000 entries.
+`keys_zone` - defines a place in memory where NGINX stores metadata, greatly imporivng performance. A 1MB zone can store roughly 8000 entries.
 
-`inactive` - defines how long an item can remain in the cache without being accessed. Expired (stale) content is deleted only when it has not been accessed for the time specified by that paramer.
+`inactive` - defines how long an item can remain in the cache without being accessed. Expired (stale) content is deleted only when it has not been accessed for the time specified by this parameter.
 
-`Strict-Transport-Security` - once the first page is loaded over HTTPS, the brower will prevent you from communicating with the server over HTTP for 31536000 seconds (1 year)
+`Strict-Transport-Security` - once the first page is loaded over HTTPS, the browser will prevent you from communicating with the server over HTTP for 31536000 seconds (1 year).
 
-`add_header X-Cache-Status` - reports the cahce status (MISS|BYPASS|EXPIRED|STALE|UPDATING|REVALIDED|HIT) in X-Cahce-Status header.
+`add_header X-Cache-Status` - reports the cache status (MISS|BYPASS|EXPIRED|STALE|UPDATING|REVALIDED|HIT) in X-Cahce-Status header.
 
 `proxy_cache_bypass   $http_secret_header;` - if any client fires a HTTP request that contains header `Secret-Header: 1`, nginx will bypass the request regardless of whether the requested resource was cached or not.
 
-`proxy_cache_valid` - for how long the cache should be valid
+`proxy_cache_valid` - defines how long the cache should be valid.
 
-`proxy_cache_use_stale` - if NGINX receives an error, timeout, any of the specified 5xx errors or is updating the cache in the background from the origin server and it has a stale version of the requested file in its cache, it delivers the stale file.
+`proxy_cache_use_stale` - if NGINX receives an error, timeout, any of the specified 5xx errors or is updating the cache in the background from the origin server, and it has a stale version of the requested file in its cache, it delivers the stale file.
 
 `proxy_cache_min_uses` - sets the number of times an item must be requested by clients before NGINX caches it. This is useful if the cache is constantly filling up, as it ensures that only the most frequently accessed items are added to the cache.
 

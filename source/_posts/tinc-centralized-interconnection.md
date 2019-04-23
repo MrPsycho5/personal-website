@@ -11,7 +11,7 @@ date: 2019-03-13 12:54:00
 ## Introduction
 
 This time we are going to use Node C as our traffic aggregator.
-You should already be familar with basic tinc configuration, that I described previous article - [Configuring Tinc, an encrypted P2P VPN](https://new.mrpsycho.pl/cheatsheets/how-to-configure-tinc-peer-to-peer-vpn).
+You should already be familar with basic tinc configuration, as I described in this previous article - [Configuring Tinc, an encrypted P2P VPN](https://new.mrpsycho.pl/cheatsheets/how-to-configure-tinc-peer-to-peer-vpn).
 
 ## Topology cheatsheet
 
@@ -24,13 +24,13 @@ You should already be familar with basic tinc configuration, that I described pr
 
 ## Node C configuration files
 
-Create the working directory:
+Create the working directory to store the configuration:
 
 ```
 mkdir -p /etc/tinc/PsychoVPN/hosts && cd /etc/tinc/PsychoVPN
 ```
 
-Start off with `tinc.conf`:
+Start off with editing `tinc.conf`:
 
 #### Node C: /etc/tinc/PsychoVPN/tinc.conf
 
@@ -44,7 +44,7 @@ ConnectTo = NodeB
 
 ### Restricting Node A and B
 
-Edit the `tinc.conf` on both Node A and B, as they should point only to Node C:
+Modify the `tinc.conf` on both Node A and B, so that they point only to Node C:
 
 #### Node A: /etc/tinc/PsychoVPN/tinc.conf
 
@@ -64,7 +64,7 @@ AddressFamily = ipv4
 ConnectTo = NodeC
 ```
 
-Create host file for Node C:
+Create a host file for Node C:
 
 #### Node C: /etc/tinc/PsychoVPN/hosts/NodeC
 
@@ -73,13 +73,13 @@ Address = 3.3.3.3
 Subnet = 10.3.0.3
 ```
 
-Create a pair of keys (make sure to save both files under `/etc/tinc/PsychoVPN`): 
+Create a pair of keys (make sure to save both files under `/etc/tinc/PsychoVPN`):
 
 ```
 tincd -n PsychoVPN -K 4096
 ```
 
-Append the public key to `NodeC` host file.
+Append the public key to `NodeC`'s host file.
 
 ```
 cat rsa_key.pub >> hosts/NodeC
@@ -99,7 +99,7 @@ scp <user>@<NodeA>:/etc/tinc/PsychoVPN/hosts/NodeA /etc/tinc/PsychoVPN/hosts/Nod
 scp <user>@<NodeB>:/etc/tinc/PsychoVPN/hosts/NodeB /etc/tinc/PsychoVPN/hosts/NodeB
 ```
 
-You can also just copy the contexct of `hosts` folder from desired Node, saving you the hassle of double authentication:
+You can also just copy the content of `hosts` folder from a different node, saving you the hassle of double authentication:
 
 ```
 scp <user>@<NodeA>:/etc/tinc/PsychoVPN/hosts/* /etc/tinc/PsychoVPN/hosts/
@@ -107,4 +107,4 @@ scp <user>@<NodeA>:/etc/tinc/PsychoVPN/hosts/* /etc/tinc/PsychoVPN/hosts/
 
 ### That's it!
 
-From this point just follow the previous instructions starting from [#Control Scrips](https://new.mrpsycho.pl/cheatsheets/how-to-configure-tinc-peer-to-peer-vpn/#Control-Scripts). Just remember to adjust the IP addresses correspondingly.
+From this point just follow the previous instructions starting from [#Control Scripts](https://new.mrpsycho.pl/cheatsheets/how-to-configure-tinc-peer-to-peer-vpn/#Control-Scripts). Just remember to adjust the IP addresses correspondingly.

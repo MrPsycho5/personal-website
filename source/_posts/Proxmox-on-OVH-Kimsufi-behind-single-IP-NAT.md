@@ -36,17 +36,17 @@ iface vmbr2 inet static
     post-down iptables -t nat -D POSTROUTING -s '192.168.0.0/24' -o vmbr0 -j MASQUERADE
 ```
 
-and start the `vmbr2` interface by executing:
+and bring the `vmbr2` interface up by executing:
 
 ```
 ifup vmbr2
 ```
 
-You can now create containers that will be able to connect to the outside world, but not the other way around. For that, you will need to forward selected ports. Also, make sure to choose `vmbr2` while creating the container!
+You can now create containers that will be able to connect to the outside world, but not the other way around. For incoming connections to work, you will need to forward a few ports. Also, make sure to choose `vmbr2` while creating the container!
 
 ![Make sure to choose "vmbr2"](https://i.mrpsycho.pl/selif/b7phh7lc.png)
 
-You can't SSH into the container right now as no port is forwarded to it, but you can enter the container by using the Proxmox built-in console (if you've chosen to use password authentication) or by executing `lxc-attach 100` on the node to attach to the container efficiently bypassing the authentication. From there you can `ping 8.8.8.8` to check whenever container has internet connection. It may also be a good opportunity to adjust your SSH config if you're using password authentication as some LXC templates do not allow root login with a password.
+You can't SSH into the container right now as no port is forwarded to it, but you can enter the container by using the Proxmox built-in console (if you've chosen to use password authentication) or by executing `lxc-attach 100` on the node to attach to the container directly, bypassing the SSH authentication. From there you can run `ping 8.8.8.8` to check if the container has an internet connection. It may also be a good opportunity to adjust your SSH config if you're using password authentication as some LXC templates do not allow root login with a password.
 
 ```
 root@nginxProxy:~# ping 8.8.8.8
@@ -64,8 +64,8 @@ rtt min/avg/max/mdev = 13.524/13.571/13.598/0.033 ms
 
 Now we can start forwarding ports to your containers.
 
-I suggest to [randomize](https://numbergenerator.org/randomnumbergenerator/1024-65535) the SSH port and check whenever it's not a [well-known](https://en.wikipedia.org/wiki/List_of_TCP_and_UDP_port_numbers#Well-known_ports) port. 
-The general procedure is to add iptables command to post-up and post-down of the interface:
+I suggest to [randomize](https://numbergenerator.org/randomnumbergenerator/1024-65535) the SSH port and check if it's not a [well-known](https://en.wikipedia.org/wiki/List_of_TCP_and_UDP_port_numbers#Well-known_ports) port.
+The general procedure is to add an iptables command to post-up and post-down of the interface:
 
 #### /etc/network/interfaces
 
@@ -78,7 +78,7 @@ post-down iptables -t nat -D PREROUTING -i [PUBLIC_INTERAFCE] -p [TCP|UDP] --dpo
 
 Usually `vmbr0` is the `[PUBLIC_INTERFACE]`.
 
-To make the changes live without restarting the interaface or rebooting the node you can execute the iptables command manually.
+To make the changes live without restarting the interface or rebooting the node you can execute the iptables command manually.
 
 #### To enable port forwarding
 
@@ -92,7 +92,7 @@ iptables -t nat -A PREROUTING -i [PUBLIC_INTERAFCE] -p [TCP|UDP] --dport [EXTERN
 post-down iptables -t nat -D PREROUTING -i [PUBLIC_INTERAFCE] -p [TCP|UDP] --dport [EXTERNAL_PORT] -j DNAT --to [INTERNAL_IP]:[INTERNAL_PORT]
 ```
 
-You can also use a range of ports (eg. `--dport 3300:3500`) if they are going to match with the internal ports (`--to 192.168.0.100`).
+You can also use a range of ports (eg. `--dport 3300:3500`) if they are going to match the internal ports (`--to 192.168.0.100`).
 
 ## Examples
 
@@ -121,7 +121,7 @@ iptables -t nat -A PREROUTING -i vmbr0 -p tcp --dport 443 -j DNAT --to 192.168.0
 
 ### Plex Media Server
 
-Plex media server not only requires TCP ports, but also some UDP ports. Fortunately, it's as simple as changing the `tcp` to `udp` in the command. This time 30053 is going to be the SSH port.
+Plex Media Server not only requires TCP ports, but also some UDP ports. Fortunately, it's as simple as changing the `tcp` to `udp` in the command. This time 30053 is going to be the SSH port.
 
 TCP: 3005; 32400; 8324; 32469 UDP: 1900; 5353; 32410
 
