@@ -1,5 +1,5 @@
 ---
-title: Configuring OVH templates to use small root partition and LVM for the rest avaiable space
+title: LVM for Proxmox on OVH/SoYouStart/Kimsufi
 date: 2019-04-23 21:46:52
 tags:
   - Proxmox
