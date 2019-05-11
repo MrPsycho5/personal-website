@@ -184,8 +184,8 @@ Again, `lvpve` can be anything you want.
 If you want to create a smaller Logical Volume you can use `vgdisplay` to look up the available space. For example
 
 - `lvcreate -L 30G -n lvpve vgpool` will create a 30GB `lvpve` Logical Volume from `vgpool`.
-- `lvextend -L80G /dev/vgpool/lvpve` will excent the partition <u>to</u> 80GB
-- `lvextend -L+80G /dev/vgpool/lvpve` will excent the partition <u>by</u> 8GB
+- `lvextend -L80G /dev/vgpool/lvpve` will extend the partition <u>to</u> 80GB
+- `lvextend -L+80G /dev/vgpool/lvpve` will extend the partition <u>by</u> 80GB
 
 ## Creating Filesystem
 
