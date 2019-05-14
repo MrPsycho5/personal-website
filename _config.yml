@@ -5,7 +5,7 @@
 # Site
 title: Jakub Papuga | System Administrator
 subtitle:
-description: Hello, I'm Jacob. I am a Linux System Administrator.
+description: Hello, I'm Jacob. I am a Linux System Administrator. <br> I can't read your mind, but I can read terminal output.
 keywords:
 author: Jakub Papuga
 language: en
@@ -79,3 +79,8 @@ theme: cactus
 ## Docs: https://hexo.io/docs/deployment.html
 deploy:
   type:
+
+## Site map generator
+sitemap:
+    path: sitemap.xml
+    template: ./sitemap_template.xml
