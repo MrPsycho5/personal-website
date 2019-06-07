@@ -82,5 +82,5 @@ deploy:
 
 ## Site map generator
 sitemap:
-    path: sitemap.xml
-    template: ./sitemap_template.xml
+  path: sitemap.xml
+  tag: false
