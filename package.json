@@ -17,7 +17,7 @@
     "hexo-renderer-marked": "^3.0.0",
     "hexo-renderer-stylus": "^1.1.0",
     "hexo-server": "^1.0.0",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.21",
     "mixin-deep": "^2.0.1"
   }
 }
